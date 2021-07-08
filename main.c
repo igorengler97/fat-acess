@@ -112,6 +112,5 @@ int main(){
 		}
 		aux += 32;			
 	}
-
 	return 0;
 }
