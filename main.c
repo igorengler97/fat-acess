@@ -42,32 +42,33 @@ typedef struct fat_std
 }__attribute__((packed)) fat_std_t;
 
 int main(){
+	
 
-    FILE *fp;
-    fat_BS_t boot_record;
+    	FILE *fp;
+    	fat_BS_t boot_record;
 	fat_std_t standard_directory;
 
-    fp = fopen("./floppyfat2.img", "rb");
-    if(fp == NULL){
-        printf("ERRO IMAGEM");
-        exit(0);
-    }
+	fp = fopen("./floppyfat2.img", "rb");
+	if(fp == NULL){
+		printf("ERRO IMAGEM");
+		exit(0);
+	}
     
-    fseek(fp, 0, SEEK_SET); // Início do boot record
-    fread(&boot_record, sizeof(fat_BS_t), 1, fp); // Lê do boot record todo
+    	fseek(fp, 0, SEEK_SET); // Início do boot record
+    	fread(&boot_record, sizeof(fat_BS_t), 1, fp); // Lê do boot record todo
 
-    printf("Bytes por setor (bytes_per_sector): %hd\n", boot_record.bytes_per_sector);
-    printf("Setores por cluster (sectors_per_cluster): %d \n", (int)boot_record.sectors_per_cluster);
-    printf("Numero de  FATs (table_count): %d\n", (int)boot_record.table_count);
-    printf("Setores por cluster: %hu\n", boot_record.bytes_per_sector);
-    printf("Tamanho fat (setores): %hu\n", boot_record.table_size_16);
-	printf("Setores por trilha: %hu\n", boot_record.sectors_per_track);
+    	printf("Bytes por setor (bytes_per_sector): %hd\n", boot_record.bytes_per_sector);
+    	printf("Setores por cluster (sectors_per_cluster): %d \n", (int)boot_record.sectors_per_cluster);
+    	printf("Numero de  FATs (table_count): %d\n", (int)boot_record.table_count);
+    	printf("Setores por cluster: %hu\n", boot_record.bytes_per_sector);
+    	printf("Tamanho fat (setores): %hu\n", boot_record.table_size_16);
+    	printf("Setores por trilha: %hu\n", boot_record.sectors_per_track);
 
 	//tamanho do diretório raiz
 	unsigned short root_dir_sectors = ((boot_record.root_entry_count * 32) + (boot_record.bytes_per_sector -1)) / boot_record.bytes_per_sector;
 	//primeiro setor de dados
 	unsigned short first_data_sector = boot_record.reserved_sector_count + (boot_record.table_count * boot_record.table_size_16) + root_dir_sectors;
-    //primeiro setor do diretório raiz
+    	//primeiro setor do diretório raiz
 	unsigned short first_root_dir_sector = first_data_sector - root_dir_sectors;
 
 	printf("\nSetor onde a FAT se inicia: %hu\n", boot_record.reserved_sector_count);
